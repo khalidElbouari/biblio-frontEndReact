@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import BookList from './components/BookList';
+import BookList from './components/BookList'
 
 import './App.css';
 

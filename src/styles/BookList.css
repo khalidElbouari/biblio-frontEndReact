@@ -1,10 +1,37 @@
 .book-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  
-  .book-list .book-card {
-    margin: 16px;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+.book-card {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-card h3 {
+  font-size: 1.2em;
+}
+
+.book-card p {
+  font-size: 1em;
+  margin: 5px 0;
+}
+
+.book-card strong {
+  font-weight: bold;
+}
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+.success-message {
+  color: green;
+  font-weight: bold;
+}
