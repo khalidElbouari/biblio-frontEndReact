@@ -50,6 +50,7 @@ export const deleteBook = async (bookId) => {
   }
 };
 
+
 // Mettre à jour un livre
 export const updateBook = async (bookId, updatedBook) => {
   try {
@@ -64,6 +65,30 @@ export const updateBook = async (bookId, updatedBook) => {
     return await response.json();
   } catch (error) {
     console.error('Error updating book:', error);
+    throw error;
+  }
+};
+// Filtrage par année (XQuery)
+export const fetchBooksAfterYear = async (year) => {
+  try {
+    const response = await fetch(`${API_URL}/after-year/${year}`);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error filtering books by year:', error);
+    throw error;
+  }
+};
+
+
+// Filtrage par auteur (XQuery)
+export const fetchBooksByAuthor = async (author) => {
+  try {
+    const response = await fetch(`${API_URL}/by-author/${encodeURIComponent(author)}`);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error filtering books by author:', error);
     throw error;
   }
 };
