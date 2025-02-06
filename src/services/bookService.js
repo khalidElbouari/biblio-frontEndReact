@@ -1,8 +1,6 @@
 // bookService.js
+const API_URL = 'http://localhost:8077/api/books';
 
-const API_URL = 'http://localhost:8077/api/books'; // URL de l'API backend
-
-// Récupérer tous les livres
 export const fetchBooks = async () => {
   try {
     const response = await fetch(API_URL);
@@ -68,7 +66,7 @@ export const updateBook = async (bookId, updatedBook) => {
     throw error;
   }
 };
-// Filtrage par année (XQuery)
+
 export const fetchBooksAfterYear = async (year) => {
   try {
     const response = await fetch(`${API_URL}/after-year/${year}`);
@@ -80,8 +78,6 @@ export const fetchBooksAfterYear = async (year) => {
   }
 };
 
-
-// Filtrage par auteur (XQuery)
 export const fetchBooksByAuthor = async (author) => {
   try {
     const response = await fetch(`${API_URL}/by-author/${encodeURIComponent(author)}`);

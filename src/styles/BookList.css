@@ -1,71 +1,176 @@
 /* BookList.css */
 
+/* Section des filtres */
 .filters-section {
-  background: #f5f5f5;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 35px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .filter-group {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
 }
 
 .filter-group input {
   flex: 1;
-  padding: 8px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 220px;
 }
 
+.filter-group input:focus {
+  border-color: #6c63ff;
+  outline: none;
+}
+
+/* Boutons de filtre */
 .filter-button, .reset-button {
-  padding: 8px 15px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: capitalize;
+  transition: background-color 0.3s, transform 0.3s ease;
 }
 
 .filter-button {
-  background-color: #4CAF50;
+  background-color: #6c63ff;
   color: white;
 }
 
 .filter-button:hover {
-  background-color: #45a049;
+  background-color: #5a53d4;
+  transform: scale(1.05);
 }
 
 .reset-button {
-  background-color: #f44336;
+  background-color: #f76c6c;
   color: white;
 }
 
 .reset-button:hover {
-  background-color: #da190b;
+  background-color: #e14b4b;
+  transform: scale(1.05);
 }
 
+/* Messages de statut */
 .message {
-  padding: 10px;
-  margin: 15px 0;
-  border-radius: 4px;
+  padding: 18px;
+  margin: 20px 0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .message.error {
-  background-color: #ffebee;
-  color: #f44336;
+  background-color: #ffe1e1;
+  color: #f76c6c;
+  border: 1px solid #f76c6c;
 }
 
 .message.success {
-  background-color: #e8f5e9;
-  color: #4CAF50;
+  background-color: #e0f7e8;
+  color: #6c63ff;
+  border: 1px solid #6c63ff;
 }
 
+/* Formulaire d'ajout */
+.add-book-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.add-book-form h2 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.form-group {
+  display: grid;
+  gap: 14px;
+}
+
+.form-group input, .form-group textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.add-button {
+  padding: 12px 30px;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: background-color 0.3s, transform 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #5a53d4;
+  transform: scale(1.05);
+}
+
+/* Grille de livres */
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 35px;
+}
+
+.book-card-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s ease;
+}
+
+.book-card-container:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .filters-section, .add-book-form {
+    padding: 18px;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
 }

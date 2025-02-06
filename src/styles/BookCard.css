@@ -1,10 +1,11 @@
+/* Carte du livre (compacte) */
 .book-card {
-  border: 1px solid #ccc;
-  padding: 16px;
-  margin: 8px;
+  border: 1px solid #ddd;
+  padding: 18px;
+  margin: 10px;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  max-width: 300px;
+  background-color: #f7f7f7;
+  max-width: 320px;
 }
 
 .book-card h3 {
@@ -13,25 +14,25 @@
 }
 
 .book-card p {
-  margin: 8px 0;
-  font-size: 14px;
+  margin: 10px 0;
+  font-size: 15px;
 }
 
 .book-card-buttons {
   display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+  justify-content: center;
+  margin-top: 15px;
 }
 
 .book-card-buttons button {
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 8px 14px;
+  font-size: 15px;
   cursor: pointer;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: #007bff;
-  color: #fff;
-  transition: background-color 0.2s ease;
+  color: white;
+  transition: background-color 0.3s ease;
 }
 
 .book-card-buttons button:hover {

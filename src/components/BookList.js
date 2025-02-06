@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import '../styles/BookList.css';
 
-import {fetchBooks, deleteBook, fetchBooksAfterYear, fetchBooksByAuthor, addBook} from '../services/bookService'; // Chemin correct si bookService.js est dans src/services
+import {fetchBooks, deleteBook, fetchBooksAfterYear, fetchBooksByAuthor, addBook} from '../services/bookService';
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -22,7 +22,7 @@ const BookList = () => {
   useEffect(() => {
     const getBooks = async () => {
       try {
-        const booksData = await fetchBooks(); // Appel de la fonction pour récupérer les livres
+        const booksData = await fetchBooks();
         setBooks(booksData);
       } catch (error) {
         setErrorMessage('Erreur lors de la récupération des livres');
@@ -31,16 +31,6 @@ const BookList = () => {
 
     getBooks();
   }, []);
-// Fonction de suppression d'un livre
-  const handleDeleteBook = async (bookId) => {
-    try {
-      await deleteBook(bookId); // Appel de la fonction de suppression
-      setBooks(books.filter(book => book.id !== bookId)); // Met à jour la liste des livres après suppression
-      setSuccessMessage('Livre supprimé avec succès !');
-    } catch (error) {
-      setErrorMessage('Erreur lors de la suppression du livre.');
-    }
-  };
 
 
 
@@ -48,68 +38,139 @@ const BookList = () => {
     e.preventDefault();
 
     const book = {
-      title: newBook.title,
-      author: newBook.author,
-      year: newBook.year,
-      price: newBook.price,
-      description: newBook.description
+      title: newBook.title?.trim(),
+      author: newBook.author?.trim(),
+      year: newBook.year?.trim(),
+      price: newBook.price?.trim(),
+      description: newBook.description?.trim()
     };
 
     try {
-      const addedBook = await addBook(book);
-      setBooks((prevBooks) => [...prevBooks, addedBook]);
+      if (book.title && book.author && book.year && book.price) {
+        await addBook(book);
+        // Rafraîchir la liste complète des livres
+        const booksData = await fetchBooks();
+        setBooks(booksData);
 
-      // Appeler fetchBooks() pour récupérer la liste complète des livres
-      const booksData = await fetchBooks();
-      setBooks(booksData);  // Met à jour les livres après l'ajout
+        // Réinitialiser le formulaire
+        setNewBook({
+          title: '',
+          author: '',
+          year: '',
+          price: '',
+          description: ''
 
-      setNewBook({
-        title: '',
-        author: '',
-        year: '',
-        price: '',
-        description: ''
-      });
+        });
 
-      setSuccessMessage('Livre ajouté avec succès');
+        setSuccessMessage('Livre ajouté avec succès');
+        setErrorMessage('');
+      } else {
+        setErrorMessage('veuillez remplir les champs');
+      }
     } catch (error) {
-      setErrorMessage('Erreur lors de l\'ajout du livre.');
+      setErrorMessage(`Erreur lors de l'ajout du livre: ${error.message}`);
       console.error(error);
     }
   };
 
+  const handleDeleteBook = async (bookId) => {
+    try {
+      const isDeleted = await deleteBook(bookId); // Appel de la fonction de suppression
+      if (isDeleted) {
+        setBooks(books.filter(book => book.id !== bookId)); // Met à jour la liste des livres après suppression
+        setSuccessMessage('Livre supprimé avec succès !');
+      } else {
+        setErrorMessage('Erreur lors de la suppression du livre.');
+      }
+    } catch (error) {
+      setErrorMessage('Erreur lors de la suppression du livre.');
+    }
+  };
 
 
   // Fonction pour filtrer les livres par année
   const handleYearFilter = async () => {
     try {
+      setErrorMessage('');
+      setSuccessMessage('');
       const filteredBooks = await fetchBooksAfterYear(filterYear); // Appel de la fonction de filtrage par année
       setBooks(filteredBooks);
+      setSuccessMessage(`Filtrage réussi : ${filteredBooks.length} livre(s) trouvé(s) après l'année ${filterYear}.`);
     } catch (error) {
       setErrorMessage('Erreur lors du filtrage par année.');
     }
   };
 
-  // Fonction pour filtrer les livres par auteur
+// Fonction pour filtrer les livres par auteur
   const handleAuthorFilter = async () => {
     try {
+      setErrorMessage('');
+      setSuccessMessage('');
       const filteredBooks = await fetchBooksByAuthor(filterAuthor); // Appel de la fonction de filtrage par auteur
       setBooks(filteredBooks);
+      setSuccessMessage(`Filtrage réussi : ${filteredBooks.length} livre(s) trouvé(s) pour l'auteur ${filterAuthor}.`);
     } catch (error) {
       setErrorMessage('Erreur lors du filtrage par auteur.');
     }
   };
 
-  // Réinitialiser les filtres
-  const resetFilters = () => {
+
+  const resetFilters = async () => {
     setFilterYear('');
     setFilterAuthor('');
-    setBooks([]); // Réinitialise la liste des livres (optionnel, tu peux aussi garder la liste initiale si nécessaire)
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      const booksData = await fetchBooks();
+      setBooks(booksData); // Mettre à jour la liste des livres
+    } catch (error) {
+      setErrorMessage('Erreur lors du rechargement des livres.');
+    }
   };
+
 
   return (
       <div className="book-list-container">
         <h1>Gestion de la Bibliothèque</h1>
+        {/* Formulaire d'ajout */}
+        <form onSubmit={handleAddBook} className="add-book-form">
+          <h2>Ajouter un Nouveau Livre</h2>
+          <div className="form-group">
+            <input
+                type="text"
+                placeholder="Titre*"
+                value={newBook.title}
+                onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
+            />
+            <input
+                type="text"
+                placeholder="Auteur*"
+                value={newBook.author}
+                onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
+            />
+            <input
+                type="number"
+                placeholder="Année*"
+                value={newBook.year}
+                onChange={(e) => setNewBook({ ...newBook, year: e.target.value })}
+            />
+            <input
+                type="number"
+                placeholder="Prix*"
+                value={newBook.price}
+                onChange={(e) => setNewBook({ ...newBook, price: e.target.value })}
+            />
+            <textarea
+                placeholder="Description"
+                value={newBook.description}
+                onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
+            />
+            <button type="submit" className="add-button">
+              Ajouter le Livre
+            </button>
+          </div>
+        </form>
 
         {/* Section Filtres */}
         <div className="filters-section">
@@ -156,68 +217,27 @@ const BookList = () => {
           </button>
         </div>
 
-        {/* Formulaire d'ajout */}
-        <form onSubmit={handleAddBook} className="add-book-form">
-          <h2>Ajouter un Nouveau Livre</h2>
-          <div className="form-group">
-            <input
-                type="text"
-                placeholder="Titre"
-                value={newBook.title}
-                onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
-            />
-            <input
-                type="text"
-                placeholder="Auteur"
-                value={newBook.author}
-                onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
-            />
-            <input
-                type="number"
-                placeholder="Année"
-                value={newBook.year}
-                onChange={(e) => setNewBook({ ...newBook, year: e.target.value })}
-            />
-            <input
-                type="number"
-                placeholder="Prix"
-                value={newBook.price}
-                onChange={(e) => setNewBook({ ...newBook, price: e.target.value })}
-            />
-            <textarea
-                placeholder="Description"
-                value={newBook.description}
-                onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
-            />
-            <button type="submit" className="add-button">
-              Ajouter le Livre
-            </button>
-          </div>
-        </form>
-
-
         {/* Messages de statut */}
         {errorMessage && <div className="message error">{errorMessage}</div>}
         {successMessage && <div className="message success">{successMessage}</div>}
 
-        {/* Liste des livres */}
-        <div className="books-grid">
-          {books.length === 0 ? (
-              <p className="no-books">Aucun livre trouvé</p>
-          ) : (
-              books.map((book, index) => (
-                  <div key={`${book.title}-${index}`} className="book-card-container">
-                    <BookCard
-                        book={book}
-                        onDelete={handleDeleteBook} // Passe la fonction handleDeleteBook en prop
-                    />
-                  </div>
-              ))
-          )}
-        </div>
+          {/* Liste des livres */}
+          <div className="books-grid">
+            {books.length === 0 ? (
+                <p className="no-books">Aucun livre trouvé</p>
+            ) : (
+                books.map((book, index) => (
+                    <div key={`${book.title}-${index}`} className="book-card-container">
+
+                      <BookCard
+                          book={book}
+                          onDelete={handleDeleteBook} // Passe la fonction handleDeleteBook en prop
+                      />
+                    </div>
+                ))
+            )}
+          </div>
       </div>
   );
-
 };
-
 export default BookList;
